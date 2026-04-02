@@ -37,7 +37,8 @@ export async function loginUser(req, res) {
         if (user == null) {
             return res.status(400).json({ message: "User with this email does not exist" })
         }
-
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        
         if (isPasswordValid) {
 
             return res.status(200).json({ message: "Login successful" })
