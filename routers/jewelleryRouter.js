@@ -1,8 +1,9 @@
 import express from "express";
-import { createJewellery } from "../controllers/jewelleryControllers.js";
+import { createJewellery, getAllJewellerys } from "../controllers/jewelleryControllers.js";
 
 const jewelleryRouter = express.Router();
 
 jewelleryRouter.post("/", createJewellery)
+jewelleryRouter.get("/", getAllJewellerys)
 
 export default jewelleryRouter;

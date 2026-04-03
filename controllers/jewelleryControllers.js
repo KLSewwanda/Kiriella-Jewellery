@@ -22,6 +22,22 @@ export async function createJewellery(req, res) {
 
         }
     } catch (error) {
-        res.status(500).json({ message: "Error creating jewellery", error: error.message })
+        res.status(500).json({ message: "Error creating jewellery"})
+    }
+}
+
+export async function getAllJewellerys(req, res) {
+    try {
+
+        if (req.user != null && req.user.isAdmin) {
+            const jewellerys = await Jewellery.find()
+            res.status(200).json(jewellerys)
+        }
+        else {
+            const jewellerys = await Jewellery.find({ isAwailable: true })
+            res.status(200).json(jewellerys)
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message })
     }
 }
