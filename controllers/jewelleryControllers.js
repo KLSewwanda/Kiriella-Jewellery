@@ -1,6 +1,13 @@
 import Jewellery from "../models/jewellery.js";
 
 export async function createJewellery(req, res) {
+    if (req.user == null) {
+        return res.status(401).json({ message: "Unauthorized" })
+    }
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ message: "Only admin can create jewellery" })
+    }
+    
     try {
         const existingJewellery = await Jewellery.findOne({ productId: req.body.productId })
 
