@@ -1,9 +1,13 @@
 import express from "express";
-import { createJewellery, getAllJewellerys } from "../controllers/jewelleryControllers.js";
+import { createJewellery, deleteJewellery, getAllJewellery, getJewelleryById, updateJewellery,} from "../controllers/jewelleryControllers.js";
 
 const jewelleryRouter = express.Router();
 
 jewelleryRouter.post("/", createJewellery)
-jewelleryRouter.get("/", getAllJewellerys)
+jewelleryRouter.get("/", getAllJewellery)
+jewelleryRouter.get("/:productId", getJewelleryById)
+
+jewelleryRouter.delete("/:productId", deleteJewellery)
+jewelleryRouter.put("/:productId", updateJewellery)
 
 export default jewelleryRouter;

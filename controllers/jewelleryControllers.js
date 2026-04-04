@@ -1,3 +1,4 @@
+import e from "express";
 import Jewellery from "../models/jewellery.js";
 
 export async function createJewellery(req, res) {
@@ -26,7 +27,7 @@ export async function createJewellery(req, res) {
     }
 }
 
-export async function getAllJewellerys(req, res) {
+export async function getAllJewellery(req, res) {
     try {
 
         if (req.user != null && req.user.isAdmin) {
@@ -41,3 +42,73 @@ export async function getAllJewellerys(req, res) {
         res.status(500).json({ message: error.message })
     }
 }
+
+export async function getJewelleryById(req, res) {
+    try {
+
+        const jewellery = await Jewellery.findOne({ productId: req.params.productId })
+
+        if (jewellery == null) {
+
+            return res.status(404).json({ message: "Jewellery not found" })
+        }
+        if (jewellery.isAwailable) {
+
+            res.status(200).json(jewellery)
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export async function updateJewellery(req, res) {
+
+    if (req.user != null && req.user.isAdmin) {
+
+        try {
+
+            if (req.body.productId != null) {
+
+                return res.status(400).json({ message: "Jewellery cannot be updated" })
+
+            }
+
+            await Jewellery.updateOne({ productId: req.params.productId }, req.body ) 
+
+            res.status(200).json({ message: "Jewellery updated successfully" })
+
+        } catch (error) {
+
+            res.status(500).json({ message: error.message })
+
+        }
+    } else {
+
+        return res.status(403).json({ message: "Only admin can update jewellery" })
+    }
+}
+
+export async function deleteJewellery(req, res) {
+    
+    if (req.user != null && req.user.isAdmin) {
+
+        try {
+            const jewellery = await Jewellery.findOne({ productId: req.params.productId })
+
+            if (jewellery == null) {
+                return res.status(404).json({ message: "Jewellery not found" })
+            }
+
+            await jewellery.deleteOne({productId: req.params.productId})
+            res.status(200).json({ message: "Jewellery deleted successfully"})
+
+        }catch (error) {
+            res.status(500).json({ message: error.message })
+        }
+    } else {
+
+        return res.status(403).json({ message: "Only admin can delete jewellery" })
+    }
+}
+
